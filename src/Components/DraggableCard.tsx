@@ -30,4 +30,4 @@ function DraggableCard({ toDo, index }: IDraggableCardProps) {
   );
 }
 
-export default React.memo(DraggableCard);
+export default React.memo(DraggableCard); // 불필요한 리렌더링 최적화
