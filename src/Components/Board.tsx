@@ -10,10 +10,11 @@ const Wrapper = styled.div`
   padding-top: 10px;
   background-color: ${(props) => props.theme.boardClolor};
   border-radius: 5px;
-  min-height: 300px;
+  height: 300px;
   display: flex;
   flex-direction: column;
   box-shadow: 10px 10px 7px rgba(0, 0, 0, 0.2);
+  overflow: auto;
 `;
 
 const Title = styled.h2`
