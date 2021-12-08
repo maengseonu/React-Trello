@@ -24,15 +24,25 @@ const Boards = styled.div`
 function App() {
   const [toDos, setToDos] = useRecoilState(toDoState);
   const onDreagEnd = (info: DropResult) => {
-    console.log(info);
-    const { destination, draggableId, source } = info;
+    const { destination, source } = info;
     if (!destination) return;
     if (destination?.droppableId === source.droppableId) {
       // 같은 보드내에서 움직임
       setToDos((allBoards) => {
         const boardCopy = [...allBoards[source.droppableId]];
+        const taskObj = boardCopy[source.index];
         boardCopy.splice(source.index, 1);
-        boardCopy.splice(destination?.index, 0, draggableId);
+        boardCopy.splice(destination?.index, 0, taskObj);
+
+        // save to local storage
+        localStorage.setItem(
+          "toDos",
+          JSON.stringify({
+            ...allBoards,
+            [source.droppableId]: boardCopy,
+          })
+        );
+
         return {
           ...allBoards,
           [source.droppableId]: boardCopy,
@@ -43,9 +53,21 @@ function App() {
       // 다른 보드로 움직임
       setToDos((allBoards) => {
         const sourceBoard = [...allBoards[source.droppableId]];
+        const taskObj = sourceBoard[source.index];
         const destinationBoard = [...allBoards[destination.droppableId]];
         sourceBoard.splice(source.index, 1);
-        destinationBoard.splice(destination.index, 0, draggableId);
+        destinationBoard.splice(destination.index, 0, taskObj);
+
+        // save to local storage
+        localStorage.setItem(
+          "toDos",
+          JSON.stringify({
+            ...allBoards,
+            [source.droppableId]: sourceBoard,
+            [destination.droppableId]: destinationBoard,
+          })
+        );
+
         return {
           ...allBoards,
           [source.droppableId]: sourceBoard,
