@@ -13,6 +13,7 @@ const Wrapper = styled.div`
   min-height: 300px;
   display: flex;
   flex-direction: column;
+  box-shadow: 10px 10px 7px rgba(0, 0, 0, 0.2);
 `;
 
 const Title = styled.h2`
@@ -30,9 +31,9 @@ interface IAreaProps {
 const Area = styled.div<IAreaProps>`
   background-color: ${(props) =>
     props.isDraggingOver
-      ? "#dfe6e9"
+      ? "#7bed9f"
       : props.isDraggingFromThis
-      ? "#b2bec3"
+      ? "#ff7675"
       : "transparent"};
   flex-grow: 1;
   transition: background-color 0.3s ease-in-out;
@@ -41,8 +42,15 @@ const Area = styled.div<IAreaProps>`
 
 const Form = styled.form`
   width: 100%;
+  display: flex;
+  justify-content: center;
+  justify-items: center;
   input {
-    width: 100%;
+    width: 80%;
+    height: 30px;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 6px 6px 7px rgba(0, 0, 0, 0.2);
   }
 `;
 

@@ -3,15 +3,17 @@ import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import { toDoState } from "./atoms";
 import Board from "./Components/Board";
+import TrashBin from "./Components/TrashCan";
 
 const Wrapper = styled.div`
   display: flex;
-  max-width: 680px;
+  max-width: 1000px;
   width: 100%;
   margin: 0 auto;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  min-height: 100vh;
+  flex-direction: column;
 `;
 
 const Boards = styled.div`
@@ -26,6 +28,29 @@ function App() {
   const onDreagEnd = (info: DropResult) => {
     const { destination, source } = info;
     if (!destination) return;
+
+    if (destination?.droppableId === "trashBin") {
+      // delete toDo
+      setToDos((allBoards) => {
+        const sourceCopy = [...allBoards[source.droppableId]];
+        sourceCopy.splice(source.index, 1);
+
+        // save to local storage
+        localStorage.setItem(
+          "toDos",
+          JSON.stringify({
+            ...allBoards,
+            [source.droppableId]: sourceCopy,
+          })
+        );
+        return {
+          ...allBoards,
+          [source.droppableId]: sourceCopy,
+        };
+      });
+      return;
+    }
+
     if (destination?.droppableId === source.droppableId) {
       // 같은 보드내에서 움직임
       setToDos((allBoards) => {
@@ -49,6 +74,7 @@ function App() {
         };
       });
     }
+
     if (destination.droppableId !== source.droppableId) {
       // 다른 보드로 움직임
       setToDos((allBoards) => {
@@ -85,6 +111,7 @@ function App() {
             <Board boardId={boardId} key={boardId} toDos={toDos[boardId]} />
           ))}
         </Boards>
+        <TrashBin />
       </Wrapper>
     </DragDropContext>
   );
